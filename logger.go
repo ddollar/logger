@@ -150,7 +150,7 @@ func (l *Logger) Replace(key, value string) *Logger {
 			writer:    l.writer,
 		}
 	} else {
-		return l.Namespace(fmt.Sprintf("%s=%s", key, value))
+		return l.Namespace("%s=%s", key, value)
 	}
 }
 

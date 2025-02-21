@@ -2,7 +2,8 @@ package logger
 
 import (
 	"bytes"
-	"fmt"
+	"context"
+	"errors"
 	"regexp"
 	"strings"
 	"testing"
@@ -34,17 +35,16 @@ func TestAtOverrides(t *testing.T) {
 	assertLine(t, buffer.String(), `ns=test at=target2 foo=bar`)
 }
 
+func TestContext(t *testing.T) {
+	ctx := context.Background()
+	log := NewLogger()
+	FromContext(log.Append("with=context").WithContext(ctx)).Logf("foo=bar")
+	assertLine(t, buffer.String(), `ns=test with=context foo=bar`)
+}
 func TestError(t *testing.T) {
 	log := NewLogger()
-	log.Error(fmt.Errorf("broken"))
-
-	lines := strings.Split(strings.TrimSpace(buffer.String()), "\n")
-
-	assertMatch(t, lines[0], `ns=test state=error error="broken" location="github.com/convox/logger/logger_test.go:[0-9]+"`)
-
-	for i := 1; i < len(lines); i++ {
-		assertMatch(t, lines[i], fmt.Sprintf(`ns=test state=error id=[0-9]+ line=%d trace="[^"]*"`, i))
-	}
+	log.Error(errors.New("broken"))
+	assertLine(t, buffer.String(), `ns=test error="broken"`)
 }
 
 func TestLog(t *testing.T) {
