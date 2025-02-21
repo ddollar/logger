@@ -3,6 +3,7 @@ package logger
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -16,6 +17,10 @@ import (
 
 	"github.com/pkg/errors"
 )
+
+type contextKey string
+
+const loggerKey contextKey = "logger"
 
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -38,6 +43,14 @@ func New(ns string) *Logger {
 
 func NewWriter(ns string, writer io.Writer) *Logger {
 	return &Logger{namespace: ns, writer: writer}
+}
+
+func FromContext(ctx context.Context) *Logger {
+	if l, ok := ctx.Value(loggerKey).(*Logger); ok {
+		return l
+	}
+
+	panic("no logger found")
 }
 
 func (l *Logger) At(at string) *Logger {
@@ -157,6 +170,10 @@ func (l *Logger) Success() error {
 func (l *Logger) Successf(format string, args ...interface{}) error {
 	l.Logf("state=success %s", fmt.Sprintf(format, args...))
 	return nil
+}
+
+func (l *Logger) WithContext(ctx context.Context) context.Context {
+	return context.WithValue(ctx, loggerKey, l)
 }
 
 func (l *Logger) Writer() io.Writer {
