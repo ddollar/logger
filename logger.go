@@ -130,6 +130,10 @@ func (l *Logger) Logf(format string, args ...interface{}) {
 	}
 }
 
+func (l *Logger) Messagef(format string, args ...interface{}) {
+	l.Logf("message=%q", fmt.Sprintf(format, args...))
+}
+
 func (l *Logger) Namespace(format string, args ...interface{}) *Logger {
 	return &Logger{
 		namespace: fmt.Sprintf("%s %s", l.namespace, fmt.Sprintf(format, args...)),

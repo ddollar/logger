@@ -53,6 +53,12 @@ func TestLog(t *testing.T) {
 	assertLine(t, buffer.String(), `ns=test string="foo" int=42 float=3.14`)
 }
 
+func TestMessagef(t *testing.T) {
+	log := NewLogger()
+	log.Messagef("string=%q int=%d float=%0.2f", "foo", 42, 3.14159)
+	assertLine(t, buffer.String(), `ns=test message="string=\"foo\" int=42 float=3.14"`)
+}
+
 func TestNamespace(t *testing.T) {
 	log := NewLogger()
 	log.Namespace("foo=bar").Namespace("baz=qux").Logf("fred=barney")
