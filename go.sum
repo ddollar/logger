@@ -1,4 +1,2 @@
-github.com/ddollar/errors v1.1.1 h1:c472b+1PLKN3BbgQHtToctYqW330ADRFlNbU5+mr0ig=
-github.com/ddollar/errors v1.1.1/go.mod h1:JBEJVrHU6BGVmBxHL7GR/Nh4X+Qek1EfXsA7xyxswrY=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
